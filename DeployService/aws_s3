@@ -1,0 +1,8 @@
++ aws-cdk-lib@2.131.0
+added 22 packages from 18 contributors, removed 1 package, updated 18 packages and audited 415 packages in 84.165s
+
+33 packages are looking for funding
+  run `npm fund` for details
+
+found 8 moderate severity vulnerabilities
+  run `npm audit fix` to fix them, or `npm audit` for details
