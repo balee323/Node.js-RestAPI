@@ -5,6 +5,7 @@ sudo yum install -y amazon-cloudwatch-agent
 sudo amazon-cloudwatch-agent-ctl -a start
 
 echo "Hello World"
+sudo mkdir -p brianbrianbrian
 
 sudo mkdir -p /opt/brianbrianbrian
 
@@ -35,8 +36,7 @@ cd /opt/ChargerService
 sudo unzip -o ChargerService.zip
 #rm the-project.zip
 
-
-# Install NPM modules and run app.js 
+# Install NPM modules and run app.js
 # login as root
 sudo su
 #add servicegroup
@@ -55,3 +55,23 @@ npm install
 
 # finally run the app!!
 node app.js
+# Install NPM modules and run app.js
+# login as root
+sudo su
+#add servicegroup
+sudo groupadd servicegroup
+# give sericegroup root admin
+sudo usermod -a -G servicegroup root
+# add ec2-user to servicegroup
+sudo usermod -a -G servicegroup ec2-user
+#change directory permissions
+sudo chgrp -R servicegroup ../ChargerService
+sudo chmod -R 777 ../ChargerService
+#change back to ec2-user
+sudo su ec2-user
+#run npm install
+npm install
+
+# finally run the app!!
+node app.js
+
