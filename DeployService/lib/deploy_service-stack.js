@@ -80,6 +80,15 @@ class DeployServiceStack extends cdk.Stack {
 
       logGroup.grantWrite(serviceRole);
 
+      const logStream = new logs.LogStream(this, 'ChargerServiceLogStream', {
+          logGroup: logGroup,
+
+          // the properties below are optional
+          logStreamName: 'ChargerServiceLogStream',
+          removalPolicy: cdk.RemovalPolicy.DESTROY,
+      });
+
+    
 
       //assign keypair usin EC2 key created in AWS dashboard
       const keyPair = ec2.KeyPair.fromKeyPairName(this, 'KeyPair', 'simple-instance-2-key');
