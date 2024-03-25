@@ -21,6 +21,11 @@ Steps to Deloy IoC:
 -Bootstrapping to get ready to use CDK (creates S3 bucket primarily)
 	- CMD prompt or shell
 		-type "cdk bootstrap"
+-run CKD project
+	-go into DeployService directory
+	-type CDK deploy 
+	-to kill service
+		-type CDK destroy
 
 
 
@@ -31,5 +36,11 @@ Steps to Delete Deployed application:
 	-type "cdk destroy" to delete the deployment stack
 
 
-Testing
+Testing:
 
+
+
+useful notes:
+
+-Location of user-data log -> /var/log/user-data.log
+-locatoon of chargerservice.servuce -> /etc/systemd/system/chargerservice.service

@@ -116,7 +116,6 @@ class DeployServiceStack extends cdk.Stack {
       // Some files should be excluded... .gitignore is a good source.
       const excludePattern = ["node_modules", "dist", ".cdk.staging", "cdk.out", "*.njcsproj", "*.sln"];
 
-
       // Step 1: Upload the project code
       const projectAsset = new s3assets.Asset(this, "ProjectFiles", {
           path: path.join(__dirname, "../../ChargerService"),
@@ -125,9 +124,7 @@ class DeployServiceStack extends cdk.Stack {
 
       // Allow EC2 to access the asset.
       projectAsset.grantRead(ec2Instance.role);
-
-      console.log("file path for Prohect : " + path.join(__dirname, "../../ChargerService"));
-
+      console.log("file path for Project : " + path.join(__dirname, "../../ChargerService"));
 
 
       // Step 2: Download the project zip file on the instance and get the reference.
@@ -144,22 +141,40 @@ class DeployServiceStack extends cdk.Stack {
       });
 
       // Allow EC2 instance to read the file
-      configScriptAsset.grantRead(ec2Instance.role);
-  
-      console.log("file path for script : " + path.join(__dirname, "user-data-script.sh"));
+      configScriptAsset.grantRead(ec2Instance.role); 
 
       // Step 4: Download the project config file get the reference.
       const configScriptFilePath = ec2Instance.userData.addS3DownloadCommand({
           bucket: configScriptAsset.bucket,
           bucketKey: configScriptAsset.s3ObjectKey,
       });
-
       console.log("configScriptFilePath path on ec2 instance : " + configScriptFilePath);
 
-      // Step 5: Execute the script on the instance passing in the zip reference.
+
+
+      //I can't get this to work right now
+      // step 5: Upload service script to S3
+      const serviceScriptAsset = new s3assets.Asset(this, "ServiceScript", {
+          path: path.join(__dirname, "chargerservice.service"),
+      });
+
+      // Allow EC2 instance to read the file
+      serviceScriptAsset.grantRead(ec2Instance.role); 
+
+
+      // Step 6: Download the project config file get the reference.
+      const serviceScriptFilePath = ec2Instance.userData.addS3DownloadCommand({
+          bucket: serviceScriptAsset.bucket,
+          bucketKey: serviceScriptAsset.s3ObjectKey,
+      });
+      console.log("serviceScriptFilePath path on ec2 instance : " + serviceScriptFilePath);
+
+
+      // Step 7: Execute the script on the instance passing in the zip reference.
       ec2Instance.userData.addExecuteFileCommand({
           filePath: configScriptFilePath,
-          arguments: projectZipFilePath,
+          arguments: projectZipFilePath
+          //arguments: '${projectZipFilePath} ${serviceScriptFilePath}'
       });
 
   }

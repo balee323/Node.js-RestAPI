@@ -1,0 +1,13 @@
+[Unit]
+Description=Charger Service
+After=network.target
+StartLimitIntervalSec=0
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+User=ec2-user
+ExecStart=/opt/ChargerService/node app.js
+
+[Install]
+WantedBy=multi-user.target

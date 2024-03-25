@@ -2,7 +2,8 @@
 
 echo "Beginning setup and run of ChargerService API"
 
-exec > >(tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1
+#uncomment line below to turn on output to file for user-script
+#exec > >(tee /var/log/user-data.log) 2>&1
 
 # Use this to install software packages
 sudo yum install -y amazon-cloudwatch-agent
@@ -14,9 +15,18 @@ if [[ "$1" != "" ]]; then
    PROJECT_ZIP="$1"
 else
     echo "No project to deploy."
-    sudo mkdir -p /opt/no_param
     exit 1
 fi
+
+#I can't get this to work right now.. commenting out
+#echo "Setting passed parameter sevice script variable"
+# Read the first parameter into $SERVICE_SCRIPT
+#if [[ "$2" != "" ]]; then
+#   SERVICE_SCRIPT="$2"
+#else
+#    echo "No service script found."
+#    exit 1
+#fi
 
 echo "unzipping project files to /opt/ChargerService/"
 # Extract the project zip at desired location.
@@ -58,7 +68,14 @@ npm install
 echo "about to run the app"
 
 # finally run the app!!
-node app.js
+#(node app.js) &
+nohup node app.js &
+
+
+#running as service isn't working propery
+#sudo cp chargerservice.service /etc/systemd/system/chargerservice.service
+#sudo systemctl start chargerservice
+#sudo systemctl enable chargerservice
 
 echo "done"
-
+exit 1
