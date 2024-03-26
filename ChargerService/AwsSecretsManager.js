@@ -3,13 +3,16 @@ var logger = require('./logger');
 
 class SecretsManager {
 
+
+
     /**
-     * Uses AWS Secrets Manager to retrieve a secret
+     * Uses AWS Secrets Manager to retrieve a secret by secretKey
      */
     static async getSecret(secretKey) {
 
-        const config = 'us-east-1'
-        const secretName = 'rds!db-3b4d33dd-e122-4573-b55c-2b7639a4906f'
+
+        var config = 'us-east-1';
+        var secretName = 'rds!db-3b4d33dd-e122-4573-b55c-2b7639a4906f';
 
         let secretsManager = new AWS.SecretsManager(config);
         try {

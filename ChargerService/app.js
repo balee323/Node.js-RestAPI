@@ -3,13 +3,13 @@ var debug = require('debug')('my express app');
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
-//var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var dataLayer = require('./DataLayer');
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var charger = require('./routes/charger');
-require('dotenv').config();
+require('dotenv').config(); //I need to research what this actually does (I think it reads local env file?)
 
 // Add Swagger modules
 var swaggerUI = require('swagger-ui-express');
@@ -41,6 +41,19 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Serve Swagger documentation
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec));
+
+//initialize Database
+var promise = dataLayer.initializeDatabase();
+
+promise.then(function (isSuccess) {
+    if (!isSuccess) {
+        logger.error("Error initializing DB.")
+    }
+    if (isSuccess) {
+        logger.info("successful initializing DB.")
+    }
+
+});
 
 // Routes
 app.use('/', routes);
