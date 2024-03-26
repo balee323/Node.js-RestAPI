@@ -6,6 +6,7 @@ var dataLayer = require('.././DataLayer');
 
 const authToken = "166c2589-3036-4683-be32-e7b2f6aeb324";
 
+//update
 router.put('/', async (req, res) => {
 
 
@@ -20,24 +21,37 @@ router.put('/', async (req, res) => {
 
         var name = req.body.name;
 
-
-     //   var isSuccessful = await dataLayer.initializeDatabase();
-
-        //if (!isSuccessful) {
-        //    res.status(500).send({ error: 'Internal server error. Please contact support.' })
-        //    return
-        //}
-
         //validate request
         //database add new charger resource
 
 
+        var isSuccessful = await dataLayer.updateCharger(req);
 
+        //for insert verb.  Move this to other endpoint
+        //var isSuccessful = await dataLayer.insertCharger(req);
+
+
+        //var isSuccessful = await dataLayer.initializeDatabase();
+
+        if (!isSuccessful) {
+            res.status(500).send({ error: 'Internal server error. Please contact support.' })
+            return
+        }
+ 
         res.send(`New charger resource ID: ${name} has been added.`);
     }
     catch (exception) {
         logger.error(exception);
-        res.status(500).send({ error: 'Internal server error. Please contact support.' })
+
+        var errorMessage = exception.toString();
+
+        if (errorMessage.includes("BAD REQUEST:")) {
+         
+            res.status(400).send(`errror: ${errorMessage}`);
+        }
+        else {
+            res.status(500).send({ error: 'Internal server error. Please contact support.' })
+        }      
     }
   
 });

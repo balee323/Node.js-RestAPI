@@ -36,6 +36,7 @@
     <Content Include="AwsSecretsManager.js" />
     <Content Include="DataLayer.js" />
     <Content Include="logger.js" />
+    <Content Include="requestValidator.js" />
     <Content Include="routes\index.js" />
     <Content Include="routes\users.js" />
     <Content Include="package.json" />

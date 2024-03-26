@@ -181,6 +181,4 @@ class DeployServiceStack extends cdk.Stack {
 }
 
 
-
-
 module.exports = { DeployServiceStack }
