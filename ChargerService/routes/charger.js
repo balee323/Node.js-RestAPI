@@ -21,17 +21,12 @@ router.put('/', async (req, res) => {
 
         var name = req.body.name;
 
-        //validate request
-        //database add new charger resource
-
+        //need class to validate request
 
         var isSuccessful = await dataLayer.updateCharger(req);
 
         //for insert verb.  Move this to other endpoint
         //var isSuccessful = await dataLayer.insertCharger(req);
-
-
-        //var isSuccessful = await dataLayer.initializeDatabase();
 
         if (!isSuccessful) {
             res.status(500).send({ error: 'Internal server error. Please contact support.' })
