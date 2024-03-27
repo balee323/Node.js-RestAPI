@@ -282,7 +282,7 @@ class DataLayer {
     }
 
     //This function could use some unit tests (or find a better way to do this. In code SQL strings are generally bad)
-    //MySQL supports stored procedures, and that would be the ideal way to insert/update records, esepcially lists or JSON.
+    //MySQL supports stored procedures, and that would be the ideal way to insert/update records, especially lists or JSON.
     static buildUpdateQueryString(requestBody) {
 
         var locationJsonString = null;
