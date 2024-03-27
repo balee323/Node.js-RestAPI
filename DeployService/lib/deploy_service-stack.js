@@ -2,6 +2,7 @@
 const cdk = require('aws-cdk-lib');
 const s3assets = require('aws-cdk-lib/aws-s3-assets');
 const ec2 = require('aws-cdk-lib/aws-ec2');
+const rds = require('aws-cdk-lib/aws-rds');
 const iam = require('aws-cdk-lib/aws-iam');
 const path = require('node:path'); 
 const logs = require('aws-cdk-lib/aws-logs');
@@ -22,10 +23,11 @@ class DeployServiceStack extends cdk.Stack {
       // 👇 create VPC in which we'll launch the Instance
       const vpc = new ec2.Vpc(this, 'my-cdk-vpc', {
           ipAddresses: ec2.IpAddresses.cidr('10.0.0.0/16'),
-          natGateways: 0,
-          subnetConfiguration: [
-              { name: 'public', cidrMask: 24, subnetType: ec2.SubnetType.PUBLIC },
-          ],
+          natGateways: 1,
+          //subnetConfiguration: [
+          //    { name: 'public', cidrMask: 24, subnetType: ec2.SubnetType.PUBLIC },
+          //    { name: 'private', cidrMask: 24, subnetType: ec2.SubnetType.PRIVATE },
+          //],
       });
 
 
@@ -62,6 +64,20 @@ class DeployServiceStack extends cdk.Stack {
       );
 
 
+      // Create the database instance.
+      const dbInstance = new rds.DatabaseInstance(this, "chargerdb1", {
+          databaseName: "chargerdb1",
+          engine: rds.DatabaseInstanceEngine.mysql({ version: rds.MysqlEngineVersion.VER_8_0_36 }),
+          vpc: vpc,
+          deletionProtection: false,
+          storageEncrypted: false,
+          storageType: rds.StorageType.GP3,
+          instanceType: ec2.InstanceType.of(ec2.InstanceClass.T3, ec2.InstanceSize.MICRO),
+          publiclyAccessible: true,
+          securityGroups: [webserverSG],
+          credentials: rds.Credentials.fromGeneratedSecret('admin')
+      });
+
 
       // 👇 create a IAM Role for the EC2 Instance
       const serviceRole = new iam.Role(this, 'webserver-role', {
@@ -69,6 +85,9 @@ class DeployServiceStack extends cdk.Stack {
           managedPolicies: [
               iam.ManagedPolicy.fromAwsManagedPolicyName('AmazonS3FullAccess'),
               iam.ManagedPolicy.fromAwsManagedPolicyName('CloudWatchAgentServerPolicy'),
+              iam.ManagedPolicy.fromAwsManagedPolicyName('SecretsManagerReadWrite'),
+              iam.ManagedPolicy.fromAwsManagedPolicyName('AmazonRDSDataFullAccess')
+
           ],
       });
 
@@ -102,7 +121,7 @@ class DeployServiceStack extends cdk.Stack {
           },
           role: serviceRole,
           securityGroup: webserverSG,
-          instanceName: 'SimpleTestInstance',
+          instanceName: 'chargerEC2',
           instanceType: ec2.InstanceType.of(
               ec2.InstanceClass.T2,
               ec2.InstanceSize.NANO,
@@ -174,7 +193,7 @@ class DeployServiceStack extends cdk.Stack {
       ec2Instance.userData.addExecuteFileCommand({
           filePath: configScriptFilePath,
           arguments: projectZipFilePath
-          //arguments: '${projectZipFilePath} ${serviceScriptFilePath}'
+          //arguments: `${projectZipFilePath} ${serviceScriptFilePath}`
       });
 
   }
