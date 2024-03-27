@@ -1,4 +1,6 @@
 # Node.js-RestAPI
+!!(View in Raw view for proper formatting of this text)!!
+
 Dependencies:
 -MySql service created prior to deployment of ChargerService 
 -EC2 key/value pair created prior, named "simple-instance-2-key" 
