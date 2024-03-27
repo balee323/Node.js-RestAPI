@@ -1,12 +1,12 @@
 # ChargerService
 
-Dependencies:
+//Dependencies:
 -MySql service created prior to deployment of ChargerService
 -EC2 key/value pair created prior, named "simple-instance-2-key"
 	-** be sure to download the SSH or putty private key when creating the key (you will no have another chance)
 
 
-Steps to Deploy MySQL service (needs to be done prior to Charger service deployment):
+//Steps to Deploy MySQL service (needs to be done prior to Charger service deployment):
 -Go to AWS console, RDS.
 -Go to Databases, click ""Create Database"
 -Choose a database creation method, select "Easy create"
@@ -23,7 +23,7 @@ Steps to Deploy MySQL service (needs to be done prior to Charger service deploym
 -**Be sure to delete Database when done using Charger Service
 
 
-Steps to add Secrets and Database connection info into ChargerService code:
+//Steps to add Secrets and Database connection info into ChargerService code:
 -After the MySQL database gets created, there will also be a corresponding AWS
 secret collection created.  
 -Navigate to AWS Secrets on AWS Dashboard
@@ -39,7 +39,7 @@ the secret.
 
 
 
-Steps to Deloy Charger Service via AWS CDK (IoC):
+//Steps to Deloy Charger Service via AWS CDK (IoC):
 -Install Node.js (NPM should be installed automatically alongside Node.js)
 -AWS account
 -Install AWS CLI on deployment machine
@@ -65,19 +65,18 @@ Steps to Deloy Charger Service via AWS CDK (IoC):
 		-Please wait at least 5 minutes after a completed CDK deployment before accessing the API
 		as serveral installations need to finish on the EC2 instance.
 
-Steps to Delete Deployed application:
+//Steps to Delete Deployed application:
 -Using CMD Prompt or Shell
 	-navigate to the deployment Project Directory
 	-type "cdk destroy" to delete the deployment stack
 
 
-Testing:
+//Testing:
 
 Key/Value pair
 To access the running EC2 instance via SSH/Putting, be sure to create a key/value pair.
 -name the key/pair "simple-instance-2-key" as this is what the deployed EC2 instance is paired with.
 -** be sure to download the SSH or putty private key when creating the key (you will no have another chance)
-
 
 Use Swagger page to test endpoints
 	-go to EC2 instance on AWS console dashboard to get public IP address
@@ -134,7 +133,7 @@ Alternatively, use Postman/Insomnia to test endpoints
 			}
 
 
-useful notes:
+//useful notes:
 
 SSH in (via putty)
 -Download Putty
